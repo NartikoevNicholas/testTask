@@ -3,6 +3,7 @@ import time
 import settings.config as conf
 
 from database import Database
+from models.telegram_bot import Bot
 from models.google_api import Sheet
 from models.cbr_quote import Country
 from models.order import Order
@@ -15,9 +16,11 @@ def data_processing(data: list):
         # условие на случай, если вдруг строка в таблице будет не полностью заполнена
         if len(el) != 4:
             continue
+
         # date
         d_m_y = el[3].split(".")
         date = datetime.date(int(d_m_y[2]), int(d_m_y[1]), int(d_m_y[0]))
+
         result.append((int(el[0]), el[1], float(el[2]), date))
     return result
 
@@ -50,7 +53,8 @@ def main():
     data_db: list = select_all_data(db)
     for el in data_db:
         if data.__contains__(el):
-            continue
+            if datetime.datetime.now().date() > el[3]:
+                Bot.message_send(f"Заказ просрочен! Номер заказа {el[1]}.")
         else:
             delete_row(db, el[0])
 
