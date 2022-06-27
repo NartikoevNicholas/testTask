@@ -12,5 +12,3 @@ user = "developer_1"
 port = "5432"
 password = os.getenv("PASSWORD")
 db_name = "test"
-
-pass

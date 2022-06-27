@@ -1,4 +1,5 @@
 import datetime
+import os
 import time
 import settings.config as conf
 
@@ -54,7 +55,8 @@ def main():
     for el in data_db:
         if data.__contains__(el):
             if datetime.datetime.now().date() > el[3]:
-                Bot.message_send(f"Заказ просрочен! Номер заказа {el[1]}.")
+                Bot(os.getenv("TOKEN"), os.getenv("CHAT_ID")).send_message(f"Заказ просрочен! Номер заказа {el[1]}.")
+                pass
         else:
             delete_row(db, el[0])
 
