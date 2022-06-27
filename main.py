@@ -5,7 +5,7 @@ import settings.config as conf
 from database import Database
 from models.telegram_bot import Bot
 from models.google_api import Sheet
-from models.cbr_quote import Country
+from models.country import Country
 from models.order import Order
 from models.pg_order import TableOrder, select_all_data, delete_row
 
@@ -38,10 +38,10 @@ def main():
     data: list = data_processing(data)
 
     # country currency
-    country_currency: float | None = Country(conf.USA_UNIQUE_CODE).currency
+    country_currency: float | None = Country(conf.USA_UNIQUE_CODE).get_currency()
 
     # connect db
-    db = Database(conf.db_name, conf.user, conf.password, conf.localhost)
+    db = Database(conf.db_name, conf.user, conf.password, conf.localhost, conf.port)
 
     # insert or update element "data" in databases
     for el in data:
